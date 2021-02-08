@@ -7,4 +7,4 @@ target_include_directories(hashmap PUBLIC
 inc
 lib/libft/inc
 )
-target_link_libraries(hashmap lib/libft)
+target_link_libraries(hashmap ft)
