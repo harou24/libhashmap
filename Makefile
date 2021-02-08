@@ -1,4 +1,4 @@
-# **************************************************************************** #
+#**************************************************************************** #
 #                                                                              #
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
@@ -57,6 +57,10 @@ fclean: clean
 	@rm -f $(NAME)
 	@rm -f test
 	@make -C $(LIB_D)/libft fclean
+
+submodule:
+	@git submodule init
+	@git submodule update
 
 test: $(NAME)
 	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIB_INC) -o test tests/main.c $(NAME) lib/libft/libft.a 
