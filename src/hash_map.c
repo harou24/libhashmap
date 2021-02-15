@@ -30,7 +30,7 @@ static uint64_t	hash(const size_t cap, const char *key)
 	return (value);
 }
 
-static t_hm_node			*new_node(char *_key, char *_value)
+static t_hm_node			*new_node(char *_key, void *_value)
 {
 	t_hm_node *node;
    
@@ -71,10 +71,10 @@ void			hm_destroy(void *_hm)
 	free(hm);
 }
 
-static char			*hm_value_set(t_hash_map *hm,
+static void			*hm_value_set(t_hash_map *hm,
 									t_hm_node	**node,
 									char *_key,
-									char *_value)
+									void *_value)
 {
 	*node = new_node(_key, _value);
 	if (*node)
@@ -97,12 +97,12 @@ static char			*hm_value_set(t_hash_map *hm,
 		return (NULL);
 }
 
-static char			*hm_update_value_for_collision(t_hash_map *hm,
+static void			*hm_update_value_for_collision(t_hash_map *hm,
 													t_hm_node *node,
 													char *_key,
-													char *_value)
+													void *_value)
 {
-	char			*old_value;
+	void			*old_value;
 	t_hm_node		*prev;
 
 	prev = node;
@@ -132,11 +132,11 @@ static char			*hm_update_value_for_collision(t_hash_map *hm,
 		return (NULL);
 }
 
-char				*hm_set(void *_hm,
+void				*hm_set(void *_hm,
 							char *_key,
-							char *_value)
+							void *_value)
 {
-	char		*old_value;
+	void		*old_value;
 	t_hash_map	*hm;
 	t_hm_node	**node;
 	
@@ -184,7 +184,7 @@ t_kv_pair			hm_get_seq(const void *_hm)
 	return (pair);
 }
 
-char			*hm_get(const void *_hm, const char *_key)
+void			*hm_get(const void *_hm, const char *_key)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
 	t_hm_node			*node;
