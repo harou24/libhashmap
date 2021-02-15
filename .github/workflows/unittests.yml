@@ -1,0 +1,26 @@
+name: Unittests
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    name: Run Catch2 unittests
+
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Unittest lexer
+      run: |
+        cmake .
+        make
+        ctest --output-on-failure .
