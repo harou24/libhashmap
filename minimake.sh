@@ -1,5 +1,14 @@
 #!/bin/sh
 
+###################################################################
+#Script Name	: minimake.sh                   
+#Description	: build cmake, compile, test, clean                                                                   
+#Args           : none, test, clean                                                                                          
+#Author       	: Stan Verschuuren                                                
+#Email         	: sverschu@student.codam.nl
+#Github         : https://github.com/s-t-a-n
+###################################################################
+
 build_dir=build
 
 if [ $# -eq 1 ] && [ "$1" == "test" ]; then
