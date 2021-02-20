@@ -16,6 +16,7 @@ SRC_D  = src
 INC_D = inc
 OBJ_D = obj
 LIB_D = lib
+TEST_D = tests/standalone_tests
 
 SRC = $(SRC_D)/hash_map.c
 
@@ -63,7 +64,7 @@ submodule:
 	@git submodule update
 
 test: $(NAME)
-	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIB_INC) -o test tests/main.c $(NAME) lib/libft/libft.a 
+	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIB_INC) -o test $(TEST_D)/main.c $(NAME) $(LIBFT)
 	@./test
 	
 re: fclean all
