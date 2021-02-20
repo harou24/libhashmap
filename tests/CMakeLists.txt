@@ -15,13 +15,13 @@ target_link_libraries(${TEST}.bin PRIVATE hashmap ft)
 add_test(NAME ${TEST}
 		COMMAND ${TEST}.bin)
 
-### Lexer unittest
-#set (TEST "test-lexer")
-#set (SRC_LIST "src/lexer.cpp")
-#
-#add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
-#target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
-#target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
-#target_link_libraries(${TEST}.bin PRIVATE hashmap ft)
-#add_test(NAME ${TEST}
-#		COMMAND ${TEST}.bin)
+### Hashmap unittest
+set (TEST "test-hashmap")
+set (SRC_LIST "src/hashmap.cpp")
+
+add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
+target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
+target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(${TEST}.bin PRIVATE hashmap ft)
+add_test(NAME ${TEST}
+		COMMAND ${TEST}.bin)
