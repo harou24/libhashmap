@@ -13,6 +13,8 @@
 #ifndef LIBHASHMAP_H
 # define LIBHASHMAP_H
 
+#include <stddef.h>
+
 typedef struct	s_kv_pair
 {
 	char		*key;
