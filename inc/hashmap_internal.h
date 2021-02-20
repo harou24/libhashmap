@@ -8,7 +8,7 @@
 
 typedef struct			s_hm_node {
 	char				*key;
-	void				*value;
+	char				*value;
 	struct s_hm_node	*next;
 	struct s_hm_node	*prev;
 }						t_hm_node;

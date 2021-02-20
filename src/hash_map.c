@@ -30,7 +30,7 @@ static uint64_t	hash(const size_t cap, const char *key)
 	return (value);
 }
 
-static t_hm_node			*new_node(char *_key, void *_value)
+static t_hm_node			*new_node(char *_key, char *_value)
 {
 	t_hm_node *node;
    
@@ -38,7 +38,7 @@ static t_hm_node			*new_node(char *_key, void *_value)
 	if (node)
 	{
 		node->key = ft_strdup(_key);
-		node->value = _value;
+		node->value = ft_strdup(_value);
 	}
 	return (node);
 }
@@ -53,7 +53,7 @@ void			*hm_new(size_t _cap)
 	return ((void *)hm);
 }
 
-void			hm_destroy(void *_hm, void  (*f)(void *ptr))
+void			hm_destroy(void *_hm)
 {
 	t_hash_map	*hm;
 	t_hm_node	*node;
@@ -63,9 +63,8 @@ void			hm_destroy(void *_hm, void  (*f)(void *ptr))
 	node = hm->first_node;
 	while(node)
 	{
-		free(node->key);
-		f(node->value);
 		dnode = node;
+		free(node->key);
 		node = node->next;
 		free(dnode);
 	}
@@ -76,7 +75,7 @@ void			hm_destroy(void *_hm, void  (*f)(void *ptr))
 static void			*hm_value_set(t_hash_map *hm,
 									t_hm_node	**node,
 									char *_key,
-									void *_value)
+									char *_value)
 {
 	*node = new_node(_key, _value);
 	if (*node)
@@ -102,7 +101,7 @@ static void			*hm_value_set(t_hash_map *hm,
 static void			*hm_update_value_for_collision(t_hash_map *hm,
 													t_hm_node *node,
 													char *_key,
-													void *_value)
+													char *_value)
 {
 	void			*old_value;
 	t_hm_node		*prev;
@@ -136,7 +135,7 @@ static void			*hm_update_value_for_collision(t_hash_map *hm,
 
 void				*hm_set(void *_hm,
 							char *_key,
-							void *_value)
+							char *_value)
 {
 	void		*old_value;
 	t_hash_map	*hm;

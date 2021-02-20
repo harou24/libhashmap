@@ -29,7 +29,7 @@ extern "C" {
 TEST_CASE( "create_destroy hashmap", "[hashmap]" ) {
 	void *hashmap = hm_new(HM_SIZE);
 	REQUIRE(hashmap != NULL);
-	hm_destroy(hashmap, free);
+	hm_destroy(hashmap);
 }
 
 TEST_CASE( "hm_set hashmap", "[hashmap]" ) {
@@ -39,10 +39,10 @@ TEST_CASE( "hm_set hashmap", "[hashmap]" ) {
 	{
 		char *key = ft_strdup("HELLO");
 		char *value = ft_strdup("this");
-		REQUIRE(hm_set(hashmap, key, (void *)value) != NULL);
+		REQUIRE(hm_set(hashmap, key, value) != NULL);
 		free(key);
-		//free(value);
+		free(value);
 		i++;
 	}
-	hm_destroy(hashmap, free);
+	hm_destroy(hashmap);
 }
