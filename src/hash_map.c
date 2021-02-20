@@ -37,7 +37,7 @@ static t_hm_node			*new_node(char *_key, void *_value)
 	node = ft_calloc(sizeof(t_hm_node), 1);
 	if (node)
 	{
-		node->key = _key;
+		node->key = ft_strdup(_key);
 		node->value = _value;
 	}
 	return (node);
@@ -53,7 +53,7 @@ void			*hm_new(size_t _cap)
 	return ((void *)hm);
 }
 
-void			hm_destroy(void *_hm)
+void			hm_destroy(void *_hm, void  (*f)(void *ptr))
 {
 	t_hash_map	*hm;
 	t_hm_node	*node;
@@ -63,6 +63,8 @@ void			hm_destroy(void *_hm)
 	node = hm->first_node;
 	while(node)
 	{
+		free(node->key);
+		f(node->value);
 		dnode = node;
 		node = node->next;
 		free(dnode);
