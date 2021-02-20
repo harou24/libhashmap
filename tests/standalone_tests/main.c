@@ -11,7 +11,7 @@ void	run_key_null_test(void *hashmap)
 {
 	printf("\n\n---------Key null test-------------------------->\n\n");
 	hm_set(hashmap, NULL, "value");
-	printf("%s\n\n",hm_get(hashmap, NULL));
+	printf("%s\n\n",(char *)hm_get(hashmap, NULL));
 	printf("-------------------------------------------------\n\n");
 }
 
@@ -19,7 +19,7 @@ void	run_value_null_test(void *hashmap)
 {
 	printf("\n\n---------Value null test----------------------->\n\n");
 	hm_set(hashmap, "key", NULL);
-	printf("%s\n\n", hm_get(hashmap, "key"));
+	printf("%s\n\n", (char *)hm_get(hashmap, "key"));
 	printf("-------------------------------------------------\n\n");
 }
 
@@ -48,7 +48,7 @@ void	print_hashmap(void *hashmap)
 	printf("----------------Print hash map----------------->\n\n");
 	while ((pair = hm_get_seq(hashmap)).key != NULL)
 	{
-		printf("%s   ->   %s\n", pair.key, pair.value);
+		printf("%s   ->   %s\n", pair.key, (char *)pair.value);
 	}
 	printf("------------------------------------------------\n\n");
 }
@@ -70,7 +70,7 @@ void	test_ft_hm_new()
 {
 	void *hashmap = hm_new(100);
 	hm_set(hashmap, "Key", "value");
-	printf("%s\n\n",hm_get(hashmap, "Key"));
+	printf("%s\n\n", (char *)hm_get(hashmap, "Key"));
 }
 
 int		main(void)
