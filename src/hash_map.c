@@ -43,6 +43,38 @@ static t_hm_node			*new_node(char *_key, void *_value)
 	return (node);
 }
 
+static void			add_node_to_history(t_hm_node **root, t_hm_node *node)
+{
+	t_hm_node *lst;
+
+	if (!*root)
+	{
+		(*root) = node;
+	}
+	else
+	{
+		lst = *root;
+		while(lst->next)
+			lst = lst->next;
+		lst->next = node;
+	}
+}
+
+static void			history_destroy(t_hm_node *root, void (*f)(void *))
+{
+	t_hm_node *prev;
+
+	while(root)
+	{
+		prev = root;
+		root = root->next;
+		f(prev->value);
+		free(prev->key);
+		free(prev);
+	}
+}
+
+
 void			*hm_new(size_t _cap)
 {
 	t_hash_map	*hm;
@@ -53,7 +85,7 @@ void			*hm_new(size_t _cap)
 	return ((void *)hm);
 }
 
-void			hm_destroy(void *_hm)
+void			hm_destroy(void *_hm, void (*f)(void *))
 {
 	t_hash_map	*hm;
 	t_hm_node	*node;
@@ -65,9 +97,12 @@ void			hm_destroy(void *_hm)
 	{
 		dnode = node;
 		node = node->next;
+		f(dnode->value);
+		free(dnode->key);
 		free(dnode);
 	}
 	free(hm->nodes);
+	history_destroy(hm->history, f);
 	free(hm);
 }
 
@@ -148,19 +183,24 @@ void				*hm_set(void *_hm,
 	{
 		if (ft_strcmp((*node)->key, _key) != 0)
 		{
+			/* a collision happened */
 			hm->collisions++;
 			return (hm_update_value_for_collision(hm, *node, _key, _value));
 		}
 		else
 		{
+			/* update value for key */
 			hm->size++;
 			old_value = (*node)->value;
 			(*node)->value = _value;
-			return (old_value);
+
+			/* store ref to old value here */
+			add_node_to_history(&hm->history, new_node(ft_strdup((*node)->key), old_value));
+			return ((*node)->value);
 		}
 	}
 	else
-		return (hm_value_set(hm, node, _key, _value));
+		return (hm_value_set(hm, node, ft_strdup(_key), _value));
 }
 
 t_kv_pair			hm_get_seq(const void *_hm)
