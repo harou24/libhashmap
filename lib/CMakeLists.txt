@@ -18,6 +18,6 @@ endif()
 #    message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 #endif()
 
-if (NOT TARGET libft)
+if (NOT TARGET ft)
 	add_subdirectory(libft)
 endif()
