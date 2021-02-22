@@ -24,7 +24,7 @@ extern "C" {
 }
 
 #include <stdio.h>
-#define HM_SIZE 1000
+#define HM_SIZE 100
 
 TEST_CASE( "create_destroy hashmap", "[hashmap]" ) {
 	void *hashmap = hm_new(HM_SIZE);
@@ -45,3 +45,21 @@ TEST_CASE( "hm_set hashmap", "[hashmap]" ) {
 	}
 	hm_destroy(hashmap, free);
 }
+
+TEST_CASE("hm_set further testing", "[hashmap]")
+{
+	void *hashmap = hm_new(HM_SIZE);
+	extern char **environ;
+	char	**env = environ;
+	int i = 0;
+	while (i < 15)
+	{
+		char *key = ft_substr(env[i], 0, 5);
+		char *value = ft_substr(env[i], 6, ft_strlen(env[i]));
+		REQUIRE(hm_set(hashmap, key, value) != NULL);
+		free(key);
+		i++;
+	}
+	hm_destroy(hashmap, free);
+}
+
