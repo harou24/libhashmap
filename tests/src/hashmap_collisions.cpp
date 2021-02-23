@@ -1,3 +1,4 @@
+#include <string.h>
 #include <catch2/catch.hpp>
 
 /*
@@ -24,25 +25,107 @@ extern "C" {
 }
 
 #include <stdio.h>
-#define HM_SIZE 1
 
-TEST_CASE( "create_destroy hashmap for collisions", "[hashmap]" ) {
-	void *hashmap = hm_new(HM_SIZE);
-	REQUIRE(hashmap != NULL);
-	hm_destroy(hashmap, free);
+void	__randinit()
+{
+	static bool israndinit;
+
+	if (!israndinit) {
+		srand(time(NULL));
+		israndinit = true;
+	}
 }
 
-TEST_CASE( "hm_set hashmap for collisions", "[hashmap]" ) {
-	void *hashmap = hm_new(HM_SIZE);
-	REQUIRE(hashmap != NULL);
+char	get_random_char()
+{
+	char c;
+	__randinit();
 
-	size_t i = 0;
-	while(i < 500)
-	{
-		char *key = (char *)"key";
-		char *value = ft_strdup("value");
-		REQUIRE(hm_set(hashmap, key, value) != NULL);
-		i++;
+	c = rand() % 127;
+	while (c != 9 && c != 10 && c <= 32 && c >= 127) {
+		c = rand() % 127;
 	}
-	hm_destroy(hashmap, free);
+	return (c);
+}
+
+static void fill_string_with_random_ascii(char *buf, size_t buflen)
+{
+	for (size_t i = 0; i < buflen; i++) {
+		buf[i] = get_random_char();
+	}
+	buf[buflen - 1] = '\0';
+}
+
+TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
+	const size_t max_size = 10000;
+	for (size_t size = 0; size < max_size; size++) {
+		void *hm = hm_new(size);
+		REQUIRE(hm != NULL);
+		hm_destroy(hm, free);
+	}
+}
+
+TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashmap]" ) {
+	const size_t max_size = 1024;
+	char *key = (char *)"key";
+	char *value = (char *)"value";
+
+	for (size_t size = 0; size < max_size; size++) {
+		void *hm = hm_new(size);
+		REQUIRE(hm != NULL);
+
+		size_t i = 0;
+		while(i < 1024)
+		{
+			char *v = ft_strdup(value);
+			REQUIRE(hm_set(hm, key, v) != NULL);
+			i++;
+		}
+		REQUIRE(hm_get(hm, key));
+		CHECK(strcmp((char *)hm_get(hm, key), value) == 0);
+		hm_destroy(hm, free);
+	}
+}
+
+TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
+	const size_t max_size = 10000;
+	for (size_t size = 0; size < max_size; size++) {
+		void *hm = hm_new(size);
+		REQUIRE(hm != NULL);
+
+		size_t i = 0;
+		while(i < 10000)
+		{
+			char *key = (char *)malloc(1024);
+			key[1023] = '\0';
+			char *value = ft_strdup("value");
+			REQUIRE(hm_set(hm, key, value) != NULL);
+			free(key);
+			i++;
+		}
+		hm_destroy(hm, free);
+	}
+}
+
+TEST_CASE( "collisions for random keys/values with various sizes and different keys", "[hashmap]" ) {
+	const size_t max_size = 1024;
+	for (size_t size = 0; size < max_size; size++) {
+		void *hm = hm_new(size);
+		REQUIRE(hm != NULL);
+
+		size_t i = 0;
+		while(i < 1024)
+		{
+			const size_t keylen = i;
+			const size_t valuelen = i;
+			char *key = (char *)malloc(keylen);
+			fill_string_with_random_ascii(key, keylen);
+			char *value = (char *)malloc(valuelen);
+			fill_string_with_random_ascii(value, valuelen);
+			REQUIRE(hm_set(hm, key, value) != NULL);
+			free(key);
+			i++;
+		}
+		hm_destroy(hm, free);
+	}
 }
