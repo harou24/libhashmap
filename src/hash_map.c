@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
+
 #include "hashmap_internal.h"
 
 static uint64_t	hash(const size_t cap, const char *key)
@@ -37,7 +39,7 @@ static t_hm_node			*new_node(char *_key, void *_value)
 	node = ft_calloc(sizeof(t_hm_node), 1);
 	if (node)
 	{
-		node->key = _key;
+		node->key = ft_strdup(_key);
 		node->value = _value;
 	}
 	return (node);
@@ -74,11 +76,12 @@ static void			history_destroy(t_hm_node *root, void (*f)(void *))
 	}
 }
 
-
 void			*hm_new(size_t _cap)
 {
 	t_hash_map	*hm;
 
+	if (_cap == 0)
+		return (NULL);
 	hm = ft_calloc(sizeof(t_hash_map), 1);
 	hm->nodes = ft_calloc(sizeof(t_hm_node*), _cap);
 	hm->cap = _cap;
@@ -106,7 +109,7 @@ void			hm_destroy(void *_hm, void (*f)(void *))
 	free(hm);
 }
 
-static void			*hm_value_set(t_hash_map *hm,
+static void			*hm_add_new_key(t_hash_map *hm,
 									t_hm_node	**node,
 									char *_key,
 									void *_value)
@@ -117,6 +120,7 @@ static void			*hm_value_set(t_hash_map *hm,
 		hm->size++;
 		if (!hm->last_node)
 		{
+			assert(!hm->first_node);
 			hm->first_node = *node;
 			hm->last_node = *node;
 		}
@@ -132,39 +136,69 @@ static void			*hm_value_set(t_hash_map *hm,
 		return (NULL);
 }
 
-static void			*hm_update_value_for_collision(t_hash_map *hm,
-													t_hm_node *node,
+static void			*hm_find_existing_node_and_replace_value(t_hash_map *hm,
+													t_hm_node *node_at_index,
 													char *_key,
 													void *_value)
 {
 	void			*old_value;
 	t_hm_node		*prev;
 
-	prev = node;
-	while (node->next)
+	assert(node_at_index);
+	assert(_key);
+	prev = node_at_index;
+	while (node_at_index->next)
 	{
-		node = node->next;
-		if (ft_strcmp(node->key, _key) == 0)
+		node_at_index = node_at_index->next;
+		if (ft_strcmp(node_at_index->key, _key) == 0)
 		{
-			old_value = node->value;
-			node->value = _value;
-			return (old_value);
+			/* we found the same key */
+			old_value = node_at_index->value;
+
+			/* dead key, add to history -> IS THIS NECCESSARY?*/
+			add_node_to_history(&hm->history, new_node(node_at_index->key, old_value));
+
+			node_at_index->value = _value;
+			return (NULL);
 		}
-		prev = node;
+		prev = node_at_index;
 	}
-	prev->next = new_node(_key, _value);
-	if (prev->next)
-	{
-		prev->next->prev = prev;
-		prev->next->value = _value;
-		prev->next->key = _key;
-		prev->next = prev->next;
-		node->next->prev = prev;
-		hm->size++;
+	return (prev);
+}
+
+static void			*hm_insert_node(t_hash_map *hm, t_hm_node *node, t_hm_node *new)
+{
+	assert(node);
+	assert(new);
+	if (node->next) {
+		t_hm_node *node_next = node->next;
+		node->next = new;
+		new->prev = node;
+		new->next = node_next;
+		node_next->prev = new;
+	}
+	else {
+		node->next = new;
+		node->next->prev = node;
+		hm->last_node = new;
+	}
+	hm->size++;
+	return (new->value);
+}
+
+static void			*hm_handle_collision(t_hash_map *hm,
+													t_hm_node *node,
+													char *_key,
+													void *_value)
+{
+	t_hm_node *last;
+
+	last = hm_find_existing_node_and_replace_value(hm, node, _key, _value);
+	if (!last) /* NULL indicates a key was found */
 		return (_value);
-	}
-	else
-		return (NULL);
+
+	/* only gets here if this is a different key */
+	return (hm_insert_node(hm, node, new_node(_key, _value)));
 }
 
 void				*hm_set(void *_hm,
@@ -185,7 +219,10 @@ void				*hm_set(void *_hm,
 		{
 			/* a collision happened */
 			hm->collisions++;
-			return (hm_update_value_for_collision(hm, *node, _key, _value));
+			assert(hm->first_node);
+			assert(hm->last_node);
+			assert(((*node)->prev || (*node)->next) || hm->size == 1);
+			return (hm_handle_collision(hm, *node, _key, _value));
 		}
 		else
 		{
@@ -195,12 +232,12 @@ void				*hm_set(void *_hm,
 			(*node)->value = _value;
 
 			/* store ref to old value here */
-			add_node_to_history(&hm->history, new_node(ft_strdup((*node)->key), old_value));
+			add_node_to_history(&hm->history, new_node((*node)->key, old_value));
 			return ((*node)->value);
 		}
 	}
 	else
-		return (hm_value_set(hm, node, ft_strdup(_key), _value));
+		return (hm_add_new_key(hm, node, _key, _value));
 }
 
 t_kv_pair			hm_get_seq(const void *_hm)
@@ -232,8 +269,12 @@ void			*hm_get(const void *_hm, const char *_key)
 	if (_key == NULL)
 		return (NULL);
 	node = hm->nodes[hash(hm->cap, _key)];
+
+	/* verify with strcmp if key is actually key ? */
+
 	if (node && node->next)
 	{
+		/* check for collision */
 		while (node)
 		{
 			if (ft_strcmp(node->key, _key) == 0)
