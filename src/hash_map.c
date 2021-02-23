@@ -157,7 +157,7 @@ static void			*hm_update_value_for_collision(t_hash_map *hm,
 	{
 		prev->next->prev = prev;
 		prev->next->value = _value;
-		prev->next->key = _key;
+		prev->next->key = ft_strdup(_key); /* no entry points without strdup*/
 		prev->next = prev->next;
 		node->next->prev = prev;
 		hm->size++;
