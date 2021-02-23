@@ -56,9 +56,19 @@ static void fill_string_with_random_ascii(char *buf, size_t buflen)
 	buf[buflen - 1] = '\0';
 }
 
+TEST_CASE( "basics", "[hashmap]" ) {
+	const size_t max_size = 1024;
+	for (size_t size = 1; size < max_size; size++) {
+		void *hm = hm_new(size);
+		REQUIRE(hm != NULL);
+		hm_destroy(hm, free);
+	}
+	REQUIRE(hm_new(0) == NULL);
+}
+
 TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
-	const size_t max_size = 10000;
-	for (size_t size = 0; size < max_size; size++) {
+	const size_t max_size = 1024;
+	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 		hm_destroy(hm, free);
@@ -70,13 +80,11 @@ TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashm
 	char *key = (char *)"key";
 	char *value = (char *)"value";
 
-	for (size_t size = 0; size < max_size; size++) {
+	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		size_t i = 0;
-		while(i < 1024)
-		{
+		for (size_t i = 0; i < 1024; i++) {
 			char *v = ft_strdup(value);
 			REQUIRE(hm_set(hm, key, v) != NULL);
 			i++;
@@ -88,14 +96,12 @@ TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashm
 }
 
 TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
-	const size_t max_size = 10000;
-	for (size_t size = 0; size < max_size; size++) {
+	const size_t max_size = 1024;
+	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		size_t i = 0;
-		while(i < 10000)
-		{
+		for (size_t i = 0; i < 1024; i++) {
 			char *key = (char *)malloc(1024);
 			key[1023] = '\0';
 			char *value = ft_strdup("value");
@@ -109,13 +115,11 @@ TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
 
 TEST_CASE( "collisions for random keys/values with various sizes and different keys", "[hashmap]" ) {
 	const size_t max_size = 1024;
-	for (size_t size = 0; size < max_size; size++) {
+	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		size_t i = 0;
-		while(i < 1024)
-		{
+		for (size_t i = 0; i < 1024; i++) {
 			const size_t keylen = i;
 			const size_t valuelen = i;
 			char *key = (char *)malloc(keylen);
