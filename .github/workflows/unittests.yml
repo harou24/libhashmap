@@ -19,7 +19,7 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Unittest lexer
+    - name: Compile and test
       run: |
         cmake .
         make
