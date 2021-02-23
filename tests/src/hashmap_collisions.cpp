@@ -1,4 +1,5 @@
 #include <string.h>
+#include <ctype.h>
 #include <catch2/catch.hpp>
 
 /*
@@ -42,7 +43,7 @@ char	get_random_char()
 	__randinit();
 
 	c = rand() % 127;
-	while (c != 9 && c != 10 && c <= 32 && c >= 127) {
+	while (!isprint(c)) {
 		c = rand() % 127;
 	}
 	return (c);
