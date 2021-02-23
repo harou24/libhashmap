@@ -87,7 +87,6 @@ TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashm
 		for (size_t i = 0; i < 1024; i++) {
 			char *v = ft_strdup(value);
 			REQUIRE(hm_set(hm, key, v) != NULL);
-			i++;
 		}
 		CHECK(hm_get(hm, key));
 		CHECK(strcmp((char *)hm_get(hm, key), value) == 0);
@@ -107,7 +106,6 @@ TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
 			char *value = ft_strdup("value");
 			CHECK(hm_set(hm, key, value) != NULL);
 			free(key);
-			i++;
 		}
 		hm_destroy(hm, free);
 	}
@@ -128,7 +126,6 @@ TEST_CASE( "collisions for random keys/values with various sizes and different k
 			fill_string_with_random_ascii(value, valuelen);
 			CHECK(hm_set(hm, key, value) != NULL);
 			free(key);
-			i++;
 		}
 		hm_destroy(hm, free);
 	}
