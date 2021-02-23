@@ -119,7 +119,7 @@ TEST_CASE( "collisions for random keys/values with various sizes and different k
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		for (size_t i = 0; i < 1024; i++) {
+		for (size_t i = 1; i < 1024; i++) {
 			const size_t keylen = i;
 			const size_t valuelen = i;
 			char *key = (char *)malloc(keylen);
