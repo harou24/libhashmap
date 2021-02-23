@@ -109,7 +109,7 @@ void			hm_destroy(void *_hm, void (*f)(void *))
 	free(hm);
 }
 
-static void			*hm_value_set(t_hash_map *hm,
+static void			*hm_add_new_key(t_hash_map *hm,
 									t_hm_node	**node,
 									char *_key,
 									void *_value)
@@ -136,7 +136,7 @@ static void			*hm_value_set(t_hash_map *hm,
 		return (NULL);
 }
 
-static void			*hm_find_node_at_index_for_key(t_hash_map *hm,
+static void			*hm_find_existing_node_and_replace_value(t_hash_map *hm,
 													t_hm_node *node_at_index,
 													char *_key,
 													void *_value)
@@ -166,7 +166,7 @@ static void			*hm_find_node_at_index_for_key(t_hash_map *hm,
 	return (prev);
 }
 
-static void			hm_insert_node(t_hash_map *hm, t_hm_node *node, t_hm_node *new)
+static void			*hm_insert_node(t_hash_map *hm, t_hm_node *node, t_hm_node *new)
 {
 	assert(node);
 	assert(new);
@@ -183,32 +183,22 @@ static void			hm_insert_node(t_hash_map *hm, t_hm_node *node, t_hm_node *new)
 		hm->last_node = new;
 	}
 	hm->size++;
+	return (new->value);
 }
 
-static void			*hm_insert_node_at(	t_hash_map *hm,
-												t_hm_node *node,
-												char *_key,
-												void *_value)
-{
-	t_hm_node *new = new_node(_key, _value);
-	hm_insert_node(hm, node, new);
-	assert(hm->first_node);
-	return (_value);
-}
-
-static void			*hm_update_value_for_collision(t_hash_map *hm,
+static void			*hm_handle_collision(t_hash_map *hm,
 													t_hm_node *node,
 													char *_key,
 													void *_value)
 {
 	t_hm_node *last;
 
-	last = hm_find_node_at_index_for_key(hm, node, _key, _value);
+	last = hm_find_existing_node_and_replace_value(hm, node, _key, _value);
 	if (!last) /* NULL indicates a key was found */
 		return (_value);
 
 	/* only gets here if this is a different key */
-	return (hm_insert_node_at(hm, node, _key, _value));
+	return (hm_insert_node(hm, node, new_node(_key, _value)));
 }
 
 void				*hm_set(void *_hm,
@@ -232,7 +222,7 @@ void				*hm_set(void *_hm,
 			assert(hm->first_node);
 			assert(hm->last_node);
 			assert(((*node)->prev || (*node)->next) || hm->size == 1);
-			return (hm_update_value_for_collision(hm, *node, _key, _value));
+			return (hm_handle_collision(hm, *node, _key, _value));
 		}
 		else
 		{
@@ -247,7 +237,7 @@ void				*hm_set(void *_hm,
 		}
 	}
 	else
-		return (hm_value_set(hm, node, _key, _value));
+		return (hm_add_new_key(hm, node, _key, _value));
 }
 
 t_kv_pair			hm_get_seq(const void *_hm)
