@@ -77,7 +77,6 @@ TEST_CASE("hm_remove test", "[hashmap]")
 		free(key);
 		i++;
 	}
-
 	char *to_remove = ft_strdup("COLOR");
 	hm_remove(hashmap, to_remove, free);
 	free(to_remove);

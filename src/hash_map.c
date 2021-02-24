@@ -109,7 +109,19 @@ void			hm_destroy(void *_hm, void (*f)(void *))
 	free(hm);
 }
 
-void		hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
+static void			node_remove(t_hash_map *_hm, t_hm_node *_node)
+{
+	if (_node->prev)
+		_node->prev->next = _node->next;
+	else
+		_hm->first_node = _node->next;
+	if (_node->next)
+		_node->next->prev = _node->prev;
+	else
+		_hm->last_node = _node->prev;
+}
+
+void				hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
 {
 	t_hash_map	*hm;
 	t_hm_node	*node;
@@ -126,14 +138,7 @@ void		hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
 	}
 	if (!node || ft_strcmp(_key, node->key) != 0)
 		return;
-	if (node->prev)
-		node->prev->next = node->next;
-	else
-		hm->first_node = node->next;
-	if (node->next)
-		node->next->prev = node->prev;
-	else
-		hm->last_node = node->prev;
+	node_remove(hm, node);
 	free(node->key);
 	_ft_delete(node->value);
 	free(node);
