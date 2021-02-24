@@ -114,6 +114,8 @@ void		hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
 	t_hash_map	*hm;
 	t_hm_node	*node;
 	
+	if (!_key)
+		return;
 	hm = (t_hash_map *)_hm;
 	node = hm->first_node;
 	while(node)
