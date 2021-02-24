@@ -124,7 +124,7 @@ void		hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
 			break ;
 		node = node->next;
 	}
-	if (ft_strcmp(_key, node->key) != 0)
+	if (!node || ft_strcmp(_key, node->key) != 0)
 		return;
 	if (node->prev)
 		node->prev->next = node->next;
