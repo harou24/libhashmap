@@ -109,6 +109,34 @@ void			hm_destroy(void *_hm, void (*f)(void *))
 	free(hm);
 }
 
+void		hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
+{
+	t_hash_map	*hm;
+	t_hm_node	*node;
+	
+	hm = (t_hash_map *)_hm;
+	node = hm->first_node;
+	while(node)
+	{
+		if (ft_strcmp(_key, node->key) == 0)
+			break ;
+		node = node->next;
+	}
+	if (ft_strcmp(_key, node->key) != 0)
+		return;
+	if (node->prev)
+		node->prev->next = node->next;
+	else
+		hm->first_node = node->next;
+	if (node->next)
+		node->next->prev = node->prev;
+	else
+		hm->last_node = node->prev;
+	free(node->key);
+	_ft_delete(node->value);
+	free(node);
+}
+
 static void			*hm_add_new_key(t_hash_map *hm,
 									t_hm_node	**node,
 									char *_key,
