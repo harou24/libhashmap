@@ -141,8 +141,8 @@ static void			node_remove_from_list(t_hash_map *_hm, t_hm_node *_node)
 
 void				node_destroy(t_hm_node *_to_destroy, void (*_ft_delete)(void*))
 {
-	free((_to_destroy)->key);
-	_ft_delete((_to_destroy)->value);
+	free(_to_destroy->key);
+	_ft_delete(_to_destroy->value);
 	free(_to_destroy);
 }
 
@@ -162,8 +162,8 @@ void				hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
 				return;
 		}
 		node_remove_from_list(_hm, *to_remove);
+		node_destroy(*to_remove, _ft_delete);
 	}
-	node_destroy(*to_remove, _ft_delete);
 }
 
 static void			*hm_add_new_key(t_hash_map *hm,
