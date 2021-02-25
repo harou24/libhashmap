@@ -27,6 +27,8 @@ extern "C" {
 
 #include <stdio.h>
 
+#define TEST_SIZE 256
+
 void	__randinit()
 {
 	static bool israndinit;
@@ -58,7 +60,7 @@ static void fill_string_with_random_ascii(char *buf, size_t buflen)
 }
 
 TEST_CASE( "basics", "[hashmap]" ) {
-	const size_t max_size = 1024;
+	const size_t max_size = TEST_SIZE;
 	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
@@ -68,7 +70,7 @@ TEST_CASE( "basics", "[hashmap]" ) {
 }
 
 TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
-	const size_t max_size = 1024;
+	const size_t max_size = TEST_SIZE;
 	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
@@ -77,7 +79,7 @@ TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
 }
 
 TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashmap]" ) {
-	const size_t max_size = 1024;
+	const size_t max_size = TEST_SIZE;
 	char *key = (char *)"key";
 	char *value = (char *)"value";
 
@@ -85,7 +87,7 @@ TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashm
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		for (size_t i = 0; i < 1024; i++) {
+		for (size_t i = 0; i < TEST_SIZE; i++) {
 			char *v = ft_strdup(value);
 			REQUIRE(hm_set(hm, key, v) != NULL);
 		}
@@ -96,14 +98,14 @@ TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashm
 }
 
 TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
-	const size_t max_size = 1024;
+	const size_t max_size = TEST_SIZE;
 	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		for (size_t i = 0; i < 1024; i++) {
-			char *key = (char *)malloc(1024);
-			key[1023] = '\0';
+		for (size_t i = 0; i < TEST_SIZE; i++) {
+			char *key = (char *)malloc(TEST_SIZE);
+			key[TEST_SIZE - 1] = '\0';
 			char *value = ft_strdup("value");
 			CHECK(hm_set(hm, key, value) != NULL);
 			free(key);
@@ -113,12 +115,12 @@ TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
 }
 
 TEST_CASE( "collisions for random keys/values with various sizes and different keys", "[hashmap]" ) {
-	const size_t max_size = 1024;
+	const size_t max_size = TEST_SIZE;
 	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
 
-		for (size_t i = 1; i < 1024; i++) {
+		for (size_t i = 1; i < TEST_SIZE; i++) {
 			const size_t keylen = i;
 			const size_t valuelen = i;
 			char *key = (char *)malloc(keylen);
