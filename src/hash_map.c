@@ -109,22 +109,17 @@ void			hm_destroy(void *_hm, void (*f)(void *))
 	free(hm);
 }
 
-static t_hm_node		*find_node_by_key(void *_hm, char *_key)
+static t_hm_node		*find_node_by_key(t_hm_node *_node, char *_key)
 {
-	t_hash_map	*hm;
-	t_hm_node	*node;
-	
-	hm = (t_hash_map *)_hm;
-	node = hm->first_node;
-	while(node)
+	while(_node)
 	{
-		if (ft_strcmp(_key, node->key) == 0)
+		if (ft_strcmp(_key, _node->key) == 0)
 			break ;
-		node = node->next;
+		_node = _node->next;
 	}
-	if (!node || ft_strcmp(_key, node->key) != 0)
+	if (!_node || ft_strcmp(_key, _node->key) != 0)
 		return (NULL);
-	return (node);
+	return (_node);
 }
 
 static void			node_remove_from_list(t_hash_map *_hm, t_hm_node *_node)
@@ -157,7 +152,9 @@ void				hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*))
 	{
 		if (ft_strcmp((*to_remove)->key, _key) != 0)
 		{
-			*to_remove = find_node_by_key(_hm, _key);
+			if (!(*to_remove)->next)
+				return;
+			*to_remove = find_node_by_key((*to_remove)->next, _key);
 			if (!*to_remove)
 				return;
 		}
