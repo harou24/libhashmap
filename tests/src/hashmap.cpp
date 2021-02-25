@@ -63,3 +63,23 @@ TEST_CASE("hm_set further testing", "[hashmap]")
 	hm_destroy(hashmap, free);
 }
 
+TEST_CASE("hm_remove test", "[hashmap]")
+{
+	void *hashmap = hm_new(HM_SIZE);
+	extern char **environ;
+	char	**env = environ;
+	int i = 0;
+	while (i < 15)
+	{
+		char *key = ft_substr(env[i], 0, 5);
+		char *value = ft_substr(env[i], 6, ft_strlen(env[i]));
+		REQUIRE(hm_set(hashmap, key, value) != NULL);
+		free(key);
+		i++;
+	}
+	char *to_remove = ft_strdup("SHELL");
+	hm_remove(hashmap, to_remove, free);
+	free(to_remove);
+	hm_destroy(hashmap, free);
+}
+
