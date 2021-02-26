@@ -1,14 +1,6 @@
 #!/bin/sh
 
-###################################################################
-#Script Name	: minimake.sh                   
-#Description	: build cmake, compile, test, clean                                                                   
-#Args           : none, test, clean                                                                                          
-#Author       	: Stan Verschuuren                                                
-#Email         	: sverschu@student.codam.nl
-#Github         : https://github.com/s-t-a-n
-###################################################################
-
+# https://github.com/s-t-a-n
 build_dir=build
 
 if [ $# -eq 1 ] && [ "$1" == "test" ]; then
@@ -24,7 +16,7 @@ elif [ $# -eq 0 ]; then
 	# compile and copy hashmap binary and lib to root folder
 	cmake -S . -B $build_dir -DBUILD_TESTING=OFF && ( cd $build_dir && make ) \
 	&& cp $build_dir/src/libhashmap.a ./ \
-	&& echo -e "You can run ./\e[92mhashmap\e[39m now or include \e[92mlibhashmap.a\e[39m in your library." \
+	&& echo -e "You can include \e[92mlibhashmap.a\e[39m in your library." \
 	|| { echo -e "Compilation ran: \e[91mNOPE\e[39m."; false; }
 else
 	cat<<-EOF
