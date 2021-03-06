@@ -20,4 +20,5 @@ endif()
 
 if (NOT TARGET ft)
 	add_subdirectory(libft)
+add_subdirectory(pair)
 endif()

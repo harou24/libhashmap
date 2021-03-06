@@ -1,3 +1,6 @@
 [submodule "lib/libft"]
 	path = lib/libft
 	url = https://github.com/harou24/libft.git
+[submodule "lib/pair"]
+	path = lib/pair
+	url = https://github.com/harou24/pair.git

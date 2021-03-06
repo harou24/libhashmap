@@ -15,7 +15,7 @@ set_property(TARGET hashmap PROPERTY C_STANDARD 90)
 target_include_directories(hashmap PUBLIC ../inc)
 
 # This depends on (header only) boost
-target_link_libraries(hashmap PRIVATE ft)
+target_link_libraries(hashmap PRIVATE ft pair)
 
 # IDEs should put the headers in a nice place
 source_group(

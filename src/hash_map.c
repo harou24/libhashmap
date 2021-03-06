@@ -294,23 +294,23 @@ void				*hm_set(void *_hm,
 		return (hm_add_new_key(hm, node, _key, _value));
 }
 
-t_kv_pair			hm_get_seq(const void *_hm)
+t_pair			hm_get_seq(const void *_hm)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
 	static t_hm_node	*node;
-	t_kv_pair			pair;
+	t_pair			pair;
 
 	node = node ? node->next : hm->first_node;
 	if (node)
 	{
-		pair.key = node->key;
-		pair.value = node->value;
+		pair.f.key = node->key;
+		pair.s.value = node->value;
 	}
 	else
 	{
 		node = hm->first_node;
-		pair.key = NULL;
-		pair.value = NULL;
+		pair.f.key = NULL;
+		pair.s.value = NULL;
 	}
 	return (pair);
 }
