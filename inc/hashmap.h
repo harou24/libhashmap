@@ -18,10 +18,10 @@
 
 void			*hm_new(size_t _size);
 void			hm_destroy(void *_hm, void (*f)(void *));
-void			*hm_set(void *_hm, char *_key, void *_value);
+void			*hm_set(void *_hm, const char *_key, void *_value);
 void			*hm_get(const void *_hm, const char *_key);
-t_pair		hm_get_seq(const void *_hm);
+t_pair			hm_get_seq(const void *_hm);
 size_t			hm_get_collision_count(void *_hm);
-void			hm_remove(void *_hm, char *_key, void (*_ft_delete)(void*));
+void			hm_remove(void *_hm, const char *_key, void (*_ft_delete)(void*));
 
 #endif
