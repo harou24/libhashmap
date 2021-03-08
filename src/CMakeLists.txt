@@ -4,12 +4,13 @@
 # Optionally glob, but only for CMake 3.12 or later:
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${hashmap_SOURCE_DIR}/inc/*.h")
 file(GLOB SRC_LIST CONFIGURE_DEPENDS "${hashmap_SOURCE_DIR}/src/*.c")
+file(GLOB SRC_SUBROOT_LIST CONFIGURE_DEPENDS "${hashmap_SOURCE_DIR}/src/*/*.c")
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(hashmap ${SRC_LIST} ${HEADER_LIST})
+add_library(hashmap ${SRC_LIST} ${SRC_SUBROOT_LIST} ${HEADER_LIST})
 
 # Set the compilation standards
-set_property(TARGET hashmap PROPERTY C_STANDARD 90)
+set_property(TARGET hashmap PROPERTY C_STANDARD 99)
 
 # We need this directory, and users of our library will need it too
 target_include_directories(hashmap PUBLIC ../inc)

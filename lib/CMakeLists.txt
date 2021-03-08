@@ -21,7 +21,6 @@ endif()
 if (NOT TARGET ft)
 	add_subdirectory(libft)
 endif()
-
 if (NOT TARGET pair)
 	add_subdirectory(pair)
 endif()
