@@ -28,6 +28,7 @@ extern "C" {
 #include <stdio.h>
 
 #define TEST_SIZE 256
+static_assert(TEST_SIZE > 0, "test requirement not met");
 
 void	__randinit()
 {
@@ -64,6 +65,7 @@ TEST_CASE( "basics", "[hashmap]" ) {
 	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
+		CHECK(hm_size(hm) == 0);
 		hm_destroy(hm, free);
 	}
 	REQUIRE(hm_new(0) == NULL);
@@ -71,9 +73,18 @@ TEST_CASE( "basics", "[hashmap]" ) {
 
 TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
 	const size_t max_size = TEST_SIZE;
+	char *key = (char *)"key";
+	char *value = (char *)"value";
+
 	for (size_t size = 1; size < max_size; size++) {
 		void *hm = hm_new(size);
 		REQUIRE(hm != NULL);
+
+		for (size_t i = 0; i < 2 * size; i++) {
+			char *v = ft_strdup(value);
+			REQUIRE(hm_set(hm, key, v) != NULL);
+		}
+		CHECK(hm_size(hm) == 2 * size);
 		hm_destroy(hm, free);
 	}
 }
@@ -91,6 +102,7 @@ TEST_CASE( "collisions with various sizes and multiple of the same key", "[hashm
 			char *v = ft_strdup(value);
 			REQUIRE(hm_set(hm, key, v) != NULL);
 		}
+		CHECK(hm_size(hm) == TEST_SIZE);
 		CHECK(hm_get(hm, key));
 		CHECK(strcmp((char *)hm_get(hm, key), value) == 0);
 		hm_destroy(hm, free);
@@ -110,6 +122,7 @@ TEST_CASE( "collisions with various sizes and different keys", "[hashmap]" ) {
 			CHECK(hm_set(hm, key, value) != NULL);
 			free(key);
 		}
+		CHECK(hm_size(hm) == TEST_SIZE);
 		hm_destroy(hm, free);
 	}
 }
@@ -130,6 +143,7 @@ TEST_CASE( "collisions for random keys/values with various sizes and different k
 			CHECK(hm_set(hm, key, value) != NULL);
 			free(key);
 		}
+		CHECK(hm_size(hm) == TEST_SIZE - 1);
 		hm_destroy(hm, free);
 	}
 }
