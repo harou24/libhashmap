@@ -307,7 +307,15 @@ t_pair			hm_get_seq(const void *_hm)
 	static t_hm_node	*node;
 	t_pair			pair;
 
-	node = node ? node->next : hm->first_node;
+	if (_hm == NULL)
+	{
+		node = NULL;
+		pair.f.key = NULL;
+		pair.s.value = NULL;
+		return (pair);
+	}
+
+	node = (node != NULL) ? node->next : hm->first_node;
 	if (node)
 	{
 		pair.f.key = node->key;
