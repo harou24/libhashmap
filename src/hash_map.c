@@ -294,6 +294,13 @@ void				*hm_set(void *_hm,
 		return (hm_add_new_key(hm, node, _key, _value));
 }
 
+size_t			hm_size(const void *_hm)
+{
+	const t_hash_map	*hm = (t_hash_map *)_hm;
+	
+	return (hm->size);
+}
+
 t_pair			hm_get_seq(const void *_hm)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
