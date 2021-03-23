@@ -87,7 +87,6 @@ TEST_CASE( "set and unset", "[hashmap]" ) {
 		CHECK(hm_get(hm, key) != NULL);
 		hm_destroy(hm, free);
 	}
-	REQUIRE(hm_new(0) == NULL);
 }
 
 TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
