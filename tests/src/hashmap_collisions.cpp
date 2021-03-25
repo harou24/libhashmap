@@ -30,7 +30,7 @@ extern "C" {
 #define TEST_SIZE 256
 static_assert(TEST_SIZE > 0, "test requirement not met");
 
-void	__randinit()
+static void	__randinit()
 {
 	static bool israndinit;
 
@@ -40,7 +40,7 @@ void	__randinit()
 	}
 }
 
-char	get_random_char()
+static char	get_random_char()
 {
 	char c;
 	__randinit();
@@ -69,6 +69,24 @@ TEST_CASE( "basics", "[hashmap]" ) {
 		hm_destroy(hm, free);
 	}
 	REQUIRE(hm_new(0) == NULL);
+}
+
+TEST_CASE( "set and unset", "[hashmap]" ) {
+	const size_t max_size = TEST_SIZE;
+	char *key = (char *)"key";
+	char *value = (char *)"value";
+
+	for (size_t size = 1; size < max_size; size++) {
+		void *hm = hm_new(size);
+		REQUIRE(hm != NULL);
+		CHECK(hm_set(hm, key, ft_strdup(value)) != NULL);
+		CHECK(hm_set(hm, key, ft_strdup(value)) != NULL);
+		hm_remove(hm, key, free);
+		CHECK(hm_get(hm, key) == NULL);
+		CHECK(hm_set(hm, key, ft_strdup(value)) != NULL);
+		CHECK(hm_get(hm, key) != NULL);
+		hm_destroy(hm, free);
+	}
 }
 
 TEST_CASE( "collisions with various sizes", "[hashmap]" ) {
