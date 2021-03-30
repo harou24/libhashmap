@@ -44,11 +44,13 @@ void	generate_nodes(void *hashmap)
 
 void	print_hashmap(void *hashmap)
 {
-	t_kv_pair pair;
+	t_pair pair;
 	printf("----------------Print hash map----------------->\n\n");
-	while ((pair = hm_get_seq(hashmap)).key != NULL)
+	pair = hm_get_seq(hashmap);
+	while ((pair.u_f.key != NULL))
 	{
-		printf("%s   ->   %s\n", pair.key, (char *)pair.value);
+		printf("%s   ->   %s\n", pair.u_f.key, (char *)pair.u_s.value);
+		pair = hm_get_seq(hashmap);
 	}
 	printf("------------------------------------------------\n\n");
 }
@@ -62,7 +64,7 @@ void	run_loop_test(void *hashmap)
 
 void	check_for_leaks(void *hashmap)
 {
-	hm_destroy(hashmap);
+	hm_destroy(hashmap, free);
 	system("leaks a.out");
 }
 
