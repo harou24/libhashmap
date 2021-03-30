@@ -4,8 +4,8 @@
 #include "hashmap_internal.h"
 #include "libft.h"
 
-size_t	nb_nodes = 1400;
-size_t	hm_size = 1000;
+size_t	nb_nodes = 10;
+size_t	hm_size = 10;
 
 void	run_key_null_test(void *hashmap)
 {
