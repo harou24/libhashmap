@@ -14,19 +14,18 @@
 
 uint64_t	hash(const size_t cap, const char *key)
 {
-	uint64_t			value;
-	size_t 				i;
-	size_t				length;
+	uint64_t	value;
+	size_t		i;
+	size_t		length;
 
 	value = 0;
 	i = 0;
 	length = ft_strlen(key);
 	while (i < length)
 	{
-		value = value * 37 +  key[i];
+		value = value * 37 + key[i];
 		i++;
 	}
 	value = value % cap;
 	return (value);
 }
-

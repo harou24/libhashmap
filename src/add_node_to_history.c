@@ -12,9 +12,9 @@
 
 #include "hashmap_internal.h"
 
-void			add_node_to_history(t_hm_node **root, t_hm_node *node)
+void	add_node_to_history(t_hm_node **root, t_hm_node *node)
 {
-	t_hm_node *lst;
+	t_hm_node	*lst;
 
 	if (!*root)
 	{
@@ -23,9 +23,8 @@ void			add_node_to_history(t_hm_node **root, t_hm_node *node)
 	else
 	{
 		lst = *root;
-		while(lst->next)
+		while (lst->next)
 			lst = lst->next;
 		lst->next = node;
 	}
 }
-

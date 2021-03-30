@@ -12,10 +12,9 @@
 
 #include "hashmap_internal.h"
 
-size_t			hm_get_collision_count(void *_hm)
+size_t	hm_get_collision_count(void *_hm)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
 
 	return (hm->collisions);
 }
-

@@ -12,11 +12,11 @@
 
 #include "hashmap_internal.h"
 
-void			history_destroy(t_hm_node *root, void (*f)(void *))
+void	history_destroy(t_hm_node *root, void (*f)(void *))
 {
-	t_hm_node *prev;
+	t_hm_node	*prev;
 
-	while(root)
+	while (root)
 	{
 		prev = root;
 		root = root->next;
@@ -25,4 +25,3 @@ void			history_destroy(t_hm_node *root, void (*f)(void *))
 		free(prev);
 	}
 }
-

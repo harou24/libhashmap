@@ -12,10 +12,9 @@
 
 #include "hashmap_internal.h"
 
-void				node_destroy(t_hm_node *_to_destroy, void (*_ft_delete)(void*))
+void	node_destroy(t_hm_node *_to_destroy, void (*_ft_delete)(void*))
 {
 	free(_to_destroy->key);
 	_ft_delete(_to_destroy->value);
 	free(_to_destroy);
 }
-

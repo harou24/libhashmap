@@ -12,20 +12,16 @@
 
 #include "hashmap_internal.h"
 
-void			*hm_get(const void *_hm, const char *_key)
+void	*hm_get(const void *_hm, const char *_key)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
-	t_hm_node			*node;
+	t_hm_node		*node;
 
 	if (_key == NULL)
 		return (NULL);
 	node = hm->nodes[hash(hm->cap, _key)];
-
-	/* verify with strcmp if key is actually key ? */
-
 	if (node && node->next)
 	{
-		/* check for collision */
 		while (node)
 		{
 			if (ft_strcmp(node->key, _key) == 0)
@@ -39,4 +35,3 @@ void			*hm_get(const void *_hm, const char *_key)
 	else
 		return (NULL);
 }
-

@@ -12,10 +12,10 @@
 
 #include "hashmap_internal.h"
 
-t_hm_node			*new_node(const char *_key, void *_value)
+t_hm_node	*new_node(const char *_key, void *_value)
 {
-	t_hm_node *node;
-   
+	t_hm_node	*node;
+
 	node = ft_calloc(sizeof(t_hm_node), 1);
 	if (node)
 	{
@@ -24,4 +24,3 @@ t_hm_node			*new_node(const char *_key, void *_value)
 	}
 	return (node);
 }
-

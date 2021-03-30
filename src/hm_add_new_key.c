@@ -12,10 +12,10 @@
 
 #include "hashmap_internal.h"
 
-void			*hm_add_new_key(t_hash_map *hm,
-									t_hm_node	**node,
-									const char *_key,
-									void *_value)
+void	*hm_add_new_key(t_hash_map *hm,
+				t_hm_node	**node,
+					const char *_key,
+						void *_value)
 {
 	*node = new_node(_key, _value);
 	if (*node)
@@ -37,4 +37,3 @@ void			*hm_add_new_key(t_hash_map *hm,
 	else
 		return (NULL);
 }
-

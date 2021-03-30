@@ -12,9 +12,9 @@
 
 #include "hashmap_internal.h"
 
-t_hm_node		*find_node_by_key(t_hm_node *_node, const char *_key)
+t_hm_node	*find_node_by_key(t_hm_node *_node, const char *_key)
 {
-	while(_node)
+	while (_node)
 	{
 		if (ft_strcmp(_key, _node->key) == 0)
 			break ;
@@ -24,4 +24,3 @@ t_hm_node		*find_node_by_key(t_hm_node *_node, const char *_key)
 		return (NULL);
 	return (_node);
 }
-

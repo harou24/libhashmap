@@ -12,13 +12,13 @@
 
 #include "hashmap_internal.h"
 
-void			*hm_find_existing_node_and_replace_value(t_hash_map *hm,
-													t_hm_node *node_at_index,
-													const char *_key,
-													void *_value)
+void	*hm_find_existing_node_and_replace_value(t_hash_map *hm,
+						t_hm_node *node_at_index,
+							const char *_key,
+								void *_value)
 {
-	void			*old_value;
-	t_hm_node		*prev;
+	void		*old_value;
+	t_hm_node	*prev;
 
 	prev = node_at_index;
 	while (node_at_index->next)
@@ -26,12 +26,9 @@ void			*hm_find_existing_node_and_replace_value(t_hash_map *hm,
 		node_at_index = node_at_index->next;
 		if (ft_strcmp(node_at_index->key, _key) == 0)
 		{
-			/* we found the same key */
 			old_value = node_at_index->value;
-
-			/* dead key, add to history -> IS THIS NECCESSARY?*/
-			add_node_to_history(&hm->history, new_node(node_at_index->key, old_value));
-
+			add_node_to_history(&hm->history,
+				new_node(node_at_index->key, old_value));
 			node_at_index->value = _value;
 			return (NULL);
 		}
@@ -39,4 +36,3 @@ void			*hm_find_existing_node_and_replace_value(t_hash_map *hm,
 	}
 	return (prev);
 }
-

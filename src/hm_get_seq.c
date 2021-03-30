@@ -12,13 +12,16 @@
 
 #include "hashmap_internal.h"
 
-t_pair			hm_get_seq(const void *_hm)
+t_pair	hm_get_seq(const void *_hm)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
 	static t_hm_node	*node;
 	t_pair			pair;
 
-	node = node ? node->next : hm->first_node;
+	if (node)
+		node = node->next;
+	else
+		node = hm->first_node;
 	if (node)
 	{
 		pair.u_f.key = node->key;
@@ -32,4 +35,3 @@ t_pair			hm_get_seq(const void *_hm)
 	}
 	return (pair);
 }
-

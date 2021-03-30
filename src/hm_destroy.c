@@ -12,15 +12,15 @@
 
 #include "hashmap_internal.h"
 
-void			hm_destroy(void *_hm, void (*f)(void *))
+void	hm_destroy(void *_hm, void (*f)(void *))
 {
 	t_hash_map	*hm;
 	t_hm_node	*node;
 	t_hm_node	*dnode;
-	
+
 	hm = (t_hash_map *)_hm;
 	node = hm->first_node;
-	while(node)
+	while (node)
 	{
 		dnode = node;
 		node = node->next;
@@ -32,4 +32,3 @@ void			hm_destroy(void *_hm, void (*f)(void *))
 	history_destroy(hm->history, f);
 	free(hm);
 }
-

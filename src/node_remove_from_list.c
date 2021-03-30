@@ -12,7 +12,7 @@
 
 #include "hashmap_internal.h"
 
-void			node_remove_from_list(t_hash_map *_hm, t_hm_node *_node)
+void	node_remove_from_list(t_hash_map *_hm, t_hm_node *_node)
 {
 	if (_node->prev)
 		_node->prev->next = _node->next;
@@ -23,4 +23,3 @@ void			node_remove_from_list(t_hash_map *_hm, t_hm_node *_node)
 	else
 		_hm->last_node = _node->prev;
 }
-
