@@ -80,8 +80,8 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 	@rm -f test
-	@make -C $(lib_d)/libft fclean
-	@make -C $(lib_d)/pair fclean
+	@make -C $(LIB_D)/libft fclean
+	@make -C $(LIB_D)/pair fclean
 
 submodule:
 	@git submodule init
