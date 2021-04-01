@@ -9,8 +9,8 @@
 typedef struct s_hm_node {
 	struct s_hm_node		*next;
 	struct s_hm_node		*prev;
-	char				*key;
-	void				*value;
+	char					*key;
+	void					*value;
 }		t_hm_node;
 
 typedef struct s_hash_map {
