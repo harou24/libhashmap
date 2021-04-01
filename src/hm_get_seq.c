@@ -16,7 +16,7 @@ t_pair	hm_get_seq(const void *_hm)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
 	static t_hm_node	*node;
-	t_pair			pair;
+	t_pair				pair;
 
 	if (node)
 		node = node->next;

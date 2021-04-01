@@ -15,7 +15,7 @@
 void	*hm_get(const void *_hm, const char *_key)
 {
 	const t_hash_map	*hm = (t_hash_map *)_hm;
-	t_hm_node		*node;
+	t_hm_node			*node;
 
 	if (_key == NULL)
 		return (NULL);
