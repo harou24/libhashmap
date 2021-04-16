@@ -12,24 +12,27 @@
 
 #include "hashmap_internal.h"
 
-void	hm_remove(void *_hm, const char *_key, void (*_ft_delete)(void*))
+void	hm_remove(void *_hm, const char *_key, void (*ft_free)(void*))
 {
+	size_t		checksum;
 	t_hash_map	*hm;
-	t_hm_node	**to_remove;
+	t_hm_node	*node;
 
 	hm = (t_hash_map *)_hm;
-	to_remove = &hm->nodes[hash(hm->cap, _key)];
-	if (*to_remove)
+	checksum = hash(hm->cap, _key);
+	node = hm->nodes[checksum];
+	if (node)
 	{
-		if (ft_strcmp((*to_remove)->key, _key) != 0)
+		if (ft_strcmp(node->key, _key) != 0)
 		{
-			if (!(*to_remove)->next)
+			if (!node->next)
 				return ;
-			*to_remove = find_node_by_key((*to_remove)->next, _key);
-			if (!*to_remove)
+			node = find_node_by_key(node->next, _key);
+			if (!node)
 				return ;
 		}
-		node_remove_from_list(_hm, *to_remove);
-		node_destroy(*to_remove, _ft_delete);
+		node_remove_from_list(_hm, node);
+		node_destroy(node, ft_free);
+		hm->nodes[checksum] = NULL;
 	}
 }
