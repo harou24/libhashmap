@@ -10,7 +10,7 @@ file(GLOB SRC_SUBROOT_LIST CONFIGURE_DEPENDS "${hashmap_SOURCE_DIR}/src/*/*.c")
 add_library(hashmap ${SRC_LIST} ${SRC_SUBROOT_LIST} ${HEADER_LIST})
 
 # Set the compilation standards
-set_property(TARGET hashmap PROPERTY C_STANDARD 99)
+set_property(TARGET hashmap PROPERTY C_STANDARD 11)
 
 # We need this directory, and users of our library will need it too
 target_include_directories(hashmap PUBLIC ../inc)

@@ -14,8 +14,8 @@
 
 static	void	set_pair_to_null(t_pair *pair)
 {
-	pair->u_f.key = NULL;
-	pair->u_s.value = NULL;
+	pair->key = NULL;
+	pair->value = NULL;
 }
 
 t_pair	hm_get_seq(const void *_hm)
@@ -36,8 +36,8 @@ t_pair	hm_get_seq(const void *_hm)
 		node = hm->first_node;
 	if (node)
 	{
-		pair.u_f.key = node->key;
-		pair.u_s.value = node->value;
+		pair.key = node->key;
+		pair.value = node->value;
 	}
 	else
 	{
